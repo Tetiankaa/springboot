@@ -1,15 +1,15 @@
 package com.example.springboot.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@AllArgsConstructor
-@Data
-@Builder
-@NoArgsConstructor
+@Getter
+@Setter
 public class ClientUserDTO {
     private String email;
     private String password;
+
+    public ClientUserDTO(ClientUser clientUser) {
+        this.email = clientUser.getEmail();
+        this.password = clientUser.getPassword();
+    }
 }
