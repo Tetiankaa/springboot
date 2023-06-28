@@ -5,6 +5,7 @@ import com.example.springboot.models.ClientUser;
 import com.example.springboot.models.ClientUserDTO;
 
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,17 +21,11 @@ public class MainController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/clients/save")
-    public void saveClient(ClientUserDTO clientUserDTO) {
-        if (clientUserDTO.getPassword() != null) {
-            ClientUser user = ClientUser.builder()
-                    .email(clientUserDTO.getEmail())
-                    .password(passwordEncoder.encode(clientUserDTO.getPassword()))
-                    .build();
-            clientUserDAO.save(user);
-
-        } else {
-            System.out.println("there is no password");
-        }
+    public void saveClient(@RequestBody ClientUserDTO clientUserDTO) {
+        clientUserDAO.save(ClientUser.builder()
+                .email(clientUserDTO.getEmail())
+                .password(passwordEncoder.encode(clientUserDTO.getPassword() ))
+                .build());
     }
     @PostMapping("/clients/login")
     public void login(){
