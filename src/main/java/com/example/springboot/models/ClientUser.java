@@ -1,9 +1,6 @@
 package com.example.springboot.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,8 +23,14 @@ public class ClientUser implements UserDetails { //is used to retrieve the autho
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
     private List<Role> roles = Arrays.asList(Role.USER);
+
+    @Column(unique = true)
     private String email;
+
     private String password;
 
     @Override

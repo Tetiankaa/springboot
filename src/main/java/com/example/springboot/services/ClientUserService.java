@@ -1,6 +1,7 @@
 package com.example.springboot.services;
 
 import com.example.springboot.dao.ClientUserDAO;
+import com.example.springboot.dao.UserDAO;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -2,14 +2,13 @@ package com.example.springboot.models;
 
 import lombok.*;
 
-@Getter
-@Setter
-@ToString
+@Data
+//@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class ClientUserDTO {
-    private String email;
+    private String username;
     private String password;
 
 //    public ClientUserDTO(ClientUser clientUser) {
