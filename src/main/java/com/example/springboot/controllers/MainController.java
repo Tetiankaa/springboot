@@ -41,10 +41,16 @@ public class MainController {
     public void deleteById(@PathVariable("id") int id){
         customerDAO.deleteById(id);
     }
-    @PatchMapping("")
+    @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateCustomer(@RequestBody Customer customer){
-        customerDAO.save(customer);
+    public void updateCustomer(@PathVariable int id,@RequestBody Customer customer){
+        Customer customer1 = customerDAO.findById(id).get();
+        customer1.setName(customer.getName());
+        customerDAO.save(customer1);
+    }
+    @GetMapping ("/name/{name}")
+    public List<Customer> getByName(@PathVariable("name") String name){
+      return customerDAO.findByName(name);
     }
 
 }
