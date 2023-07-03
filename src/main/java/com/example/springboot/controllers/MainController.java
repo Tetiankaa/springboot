@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController //indicates that the class is a specialized version of a controller that is primarily used for RESTful web services
@@ -25,7 +26,8 @@ public class MainController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Customer> getCustomerById(@PathVariable("id")int id){
-       return new ResponseEntity<>(customerDAO.findById(id),HttpStatus.OK);
+
+       return new ResponseEntity<>(customerDAO.findById(id).get(),HttpStatus.OK);
     }
 
     @PostMapping("/save")
@@ -37,11 +39,12 @@ public class MainController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteById(@PathVariable("id") int id){
-        customerDAO.removeById(id);
+        customerDAO.deleteById(id);
     }
     @PatchMapping("")
+    @ResponseStatus(HttpStatus.OK)
     public void updateCustomer(@RequestBody Customer customer){
-        customerDAO.update(customer);
+        customerDAO.save(customer);
     }
 
 }
