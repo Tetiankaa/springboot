@@ -37,3 +37,4 @@ public class CustomerDAO {
 //By adding the @Transactional annotation to the save() method, Spring will automatically handle the transaction
 // management for you. Now, when you call the save() method, a transaction will be created, the customer
 // will be persisted, and the transaction will be committed.
+//
