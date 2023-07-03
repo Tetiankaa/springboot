@@ -39,7 +39,7 @@ public class MainController {
     public void deleteById(@PathVariable("id") int id){
         customerDAO.removeById(id);
     }
-    @PatchMapping("/{id}")
+    @PatchMapping("")
     public void updateCustomer(@RequestBody Customer customer){
         customerDAO.update(customer);
     }
