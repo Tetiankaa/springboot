@@ -3,6 +3,7 @@ package com.example.springboot.controllers;
 
 import com.example.springboot.dao.CustomerDAO;
 import com.example.springboot.models.Customer;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class MainController {
 
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.OK)
-    public void saveCustomer(@RequestBody Customer customer){
+    public void saveCustomer(@RequestBody @Valid Customer customer){
         customerDAO.save(customer);
     }
 
