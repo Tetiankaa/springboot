@@ -4,6 +4,8 @@ package com.example.springboot.controllers;
 import com.example.springboot.dao.CustomerDAO;
 import com.example.springboot.dto.CustomerDTO;
 import com.example.springboot.models.Customer;
+import com.example.springboot.views.View;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,12 +25,9 @@ public class MainController {
     private CustomerDAO customerDAO;
 
     @GetMapping("")
-    public ResponseEntity<List<CustomerDTO>> getCustomers(){
-       List<Customer> all = customerDAO.findAll();
-        List<CustomerDTO> collect = all.stream()
-                .map(customer -> new CustomerDTO(customer.getName(), customer.getAge()))
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(collect, HttpStatus.OK);
+    @JsonView(View.Superadmin.class)
+    public ResponseEntity<List<Customer>> getCustomers(){
+        return new ResponseEntity<>(customerDAO.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -60,6 +59,7 @@ public class MainController {
         customerDAO.save(customer1);
     }
     @GetMapping ("/name/{name}")
+    @JsonView(View.Admin.class)
     public List<Customer> getByName(@PathVariable("name") String name){
       return customerDAO.findByName(name);
     }
