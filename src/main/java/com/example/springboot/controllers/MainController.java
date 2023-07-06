@@ -4,6 +4,7 @@ package com.example.springboot.controllers;
 import com.example.springboot.dao.CustomerDAO;
 import com.example.springboot.dto.CustomerDTO;
 import com.example.springboot.models.Customer;
+import com.example.springboot.services.CustomerService;
 import com.example.springboot.views.View;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.Valid;
@@ -22,46 +23,39 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class MainController {
 
-    private CustomerDAO customerDAO;
+    private CustomerService customerService;
 
     @GetMapping("")
-    @JsonView(View.Superadmin.class)
-    public ResponseEntity<List<Customer>> getCustomers(){
-        return new ResponseEntity<>(customerDAO.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<CustomerDTO>> getCustomers(){
+        return new ResponseEntity<>(customerService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable("id")int id){
-
-       return new ResponseEntity<>(customerDAO.findById(id).get(),HttpStatus.OK);
+    public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable("id")int id){
+       return new ResponseEntity<>(customerService.findById(id),HttpStatus.OK);
     }
 
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.OK)
     public void saveCustomer(@RequestBody @Valid CustomerDTO customerDTO){
-        Customer customer1 = new Customer();
-        customer1.setName(customerDTO.getName());
-        customer1.setAge(customerDTO.getAge());
-
-        customerDAO.save(customer1);
+       customerService.save(customerDTO);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteById(@PathVariable("id") int id){
-        customerDAO.deleteById(id);
+
+        customerService.delete(id);
     }
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void updateCustomer(@PathVariable int id,@RequestBody Customer customer){
-        Customer customer1 = customerDAO.findById(id).get();
-        customer1.setName(customer.getName());
-        customerDAO.save(customer1);
+    public void updateCustomer(@PathVariable int id,@RequestBody CustomerDTO customerDTO){
+        customerService.update(id, customerDTO);
     }
+
     @GetMapping ("/name/{name}")
-    @JsonView(View.Admin.class)
-    public List<Customer> getByName(@PathVariable("name") String name){
-      return customerDAO.findByName(name);
+    public List<CustomerDTO> getByName(@PathVariable("name") String name){
+      return customerService.findByName(name);
     }
 
 }
