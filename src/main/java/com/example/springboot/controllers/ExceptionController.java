@@ -1,5 +1,6 @@
 package com.example.springboot.controllers;
 
+import com.example.springboot.dto.CustomerSizeExceptionDTO;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -8,9 +9,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice // It is used to handle exceptions globally across multiple controllers in a RESTful application.
 public class ExceptionController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public String sizeException(MethodArgumentNotValidException e){
-        System.out.println(e);
-        return e.getFieldError().getDefaultMessage();
+    public CustomerSizeExceptionDTO sizeException(MethodArgumentNotValidException e){
+
+        return new CustomerSizeExceptionDTO(400,e.getFieldError().getField(),e.getFieldError().getDefaultMessage());
 
     }
 }

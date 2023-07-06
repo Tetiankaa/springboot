@@ -2,6 +2,7 @@ package com.example.springboot.controllers;
 
 
 import com.example.springboot.dao.CustomerDAO;
+import com.example.springboot.dto.CustomerDTO;
 import com.example.springboot.models.Customer;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @RestController //indicates that the class is a specialized version of a controller that is primarily used for RESTful web services
@@ -21,8 +23,12 @@ public class MainController {
     private CustomerDAO customerDAO;
 
     @GetMapping("")
-    public ResponseEntity<List<Customer>> getCustomers(){
-        return new ResponseEntity<>(customerDAO.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<CustomerDTO>> getCustomers(){
+       List<Customer> all = customerDAO.findAll();
+        List<CustomerDTO> collect = all.stream()
+                .map(customer -> new CustomerDTO(customer.getName(), customer.getAge()))
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(collect, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -33,8 +39,12 @@ public class MainController {
 
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.OK)
-    public void saveCustomer(@RequestBody @Valid Customer customer){
-        customerDAO.save(customer);
+    public void saveCustomer(@RequestBody @Valid CustomerDTO customerDTO){
+        Customer customer1 = new Customer();
+        customer1.setName(customerDTO.getName());
+        customer1.setAge(customerDTO.getAge());
+
+        customerDAO.save(customer1);
     }
 
     @DeleteMapping("/{id}")
