@@ -30,16 +30,12 @@ public class Customer {
     @NotBlank(message = "Please provide name")
     @Size(min = 3,message = "provide at least 3 characters")
     @Size(max = 255,message = "too long name")
-    @JsonView({View.Superadmin.class,View.Admin.class})
     private String name;
 
-    @Max(value = 120,message = "Too high age")
-    @Min(value = 0,message = "Age can't be less than 0")
-    @JsonView(View.Superadmin.class)
-    private int age;
+    private String file;
 
-    private String password;
-
-    @JsonView(View.Admin.class)
-    private String email;
+    public Customer(String name, String file) {
+        this.name = name;
+        this.file = file;
+    }
 }

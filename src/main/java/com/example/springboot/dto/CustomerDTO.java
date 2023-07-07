@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class CustomerDTO {
     private String name;
-    private int age;
+    private String file;
 }
 
 //DTOs are objects used to transfer data between different layers of an application, such as between
