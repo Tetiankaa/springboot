@@ -35,8 +35,11 @@ public class Customer {
 
     @Max(value = 120,message = "Too high age")
     @Min(value = 0,message = "Age can't be less than 0")
-    @JsonView({View.Superadmin.class,View.Admin.class})
+    @JsonView(View.Superadmin.class)
     private int age;
 
     private String password;
+
+    @JsonView(View.Admin.class)
+    private String email;
 }

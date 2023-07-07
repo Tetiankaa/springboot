@@ -5,8 +5,10 @@ import com.example.springboot.dao.CustomerDAO;
 import com.example.springboot.dto.CustomerDTO;
 import com.example.springboot.models.Customer;
 import com.example.springboot.services.CustomerService;
+import com.example.springboot.services.MailService;
 import com.example.springboot.views.View;
 import com.fasterxml.jackson.annotation.JsonView;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
 public class MainController {
 
     private CustomerService customerService;
+    private MailService mailService;
 
     @GetMapping("")
     public ResponseEntity<List<CustomerDTO>> getCustomers(){
@@ -58,4 +61,10 @@ public class MainController {
       return customerService.findByName(name);
     }
 
+    @PostMapping("/send")
+    @JsonView(View.Admin.class)
+    @ResponseStatus(HttpStatus.OK)
+    public void sendEmail(@RequestBody Customer customer) throws MessagingException {
+        mailService.send(customer.getEmail());
+    }
 }
