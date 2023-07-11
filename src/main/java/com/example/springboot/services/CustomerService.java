@@ -1,24 +1,23 @@
 package com.example.springboot.services;
 
 import com.example.springboot.dao.CustomerDAO;
-import com.example.springboot.models.Customer;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class CustomerService {
+public class CustomerService implements UserDetailsService {
+
     private CustomerDAO customerDAO;
 
-    public List<Customer> findImages(){
-       return customerDAO.findAll();
+    @Override
+    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+        return customerDAO.findByLogin(login);
     }
-    public void save(Customer customer){
-        customerDAO.save(customer);
-    }
-
 }
+//У security свій зв'язок з базою даних і тому, щоб знайти користувача за його логіном або емайлом потрібно
+//імплементувати UserDetailsService. Напряму через DAO не буде працювати.

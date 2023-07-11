@@ -1,41 +1,67 @@
 package com.example.springboot.models;
 
-import com.example.springboot.views.View;
-import com.fasterxml.jackson.annotation.JsonView;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.*;
+
+@AllArgsConstructor
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
-@AllArgsConstructor
 
 @Entity
-public class Customer {
+public class Customer implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(View.Superadmin.class)
     private int id;
 
-    @NotBlank(message = "Please provide name")
-    @Size(min = 3,message = "provide at least 3 characters")
-    @Size(max = 255,message = "too long name")
-    private String name;
+    @Column(unique = true)
+    private String login;
 
-    private String file;
+    private String password;
 
-    public Customer(String name, String file) {
-        this.name = name;
-        this.file = file;
+    @Enumerated
+    @ElementCollection
+    private List<Roles> roles = Arrays.asList(Roles.USER);
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+       List<GrantedAuthority> authorities = new ArrayList<>();
+       this.roles.forEach(role->authorities.add(new SimpleGrantedAuthority(role.name())));
+       return authorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.login;
+    }
+    @Override
+    public String getPassword(){
+        return this.password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
