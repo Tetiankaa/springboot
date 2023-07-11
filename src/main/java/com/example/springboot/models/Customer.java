@@ -25,14 +25,14 @@ public class Customer implements UserDetails {
 
     private String password;
 
-    @Enumerated
-    @ElementCollection
-    private List<Roles> roles = Arrays.asList(Roles.USER);
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(value = EnumType.STRING)
+    private List<Roles> role = Arrays.asList(Roles.USER);
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
        List<GrantedAuthority> authorities = new ArrayList<>();
-       this.roles.forEach(role->authorities.add(new SimpleGrantedAuthority(role.name())));
+       this.role.forEach(r->authorities.add(new SimpleGrantedAuthority(r.name())));
        return authorities;
     }
 
